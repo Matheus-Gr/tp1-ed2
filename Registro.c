@@ -8,20 +8,66 @@
 #include <time.h>
 #include <string.h>
 
-void criarArquivoBinario(int quantidade, char* caminho) {
+void criarArquivoBinario(int quantidade, char* caminho, int ordem) {
     Registro registro;
-    FILE *arquivo = fopen(caminho, "wb");
+
+    char nomeArquivo[256];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "%s_%d_%d.bin", caminho, quantidade, ordem);
+
+    printf("Nome do arquivo: %s\n", nomeArquivo);
+
+    FILE *arquivo = fopen(nomeArquivo, "wb");
     if (arquivo == NULL) {
-        printf("Erro ao criar arquivo binário!\n");
+        printf("Erro ao criar arquivo binario!\n");
         exit(1);
     }
-    for (int i = 0; i < quantidade; i++) {
-        registro.chave = i;
-        registro.dado1 = i * 10;
-        sprintf(registro.dado2, "Dado 2 do registro %d", i);
-        sprintf(registro.dado3, "Dado 3 do registro %d", i);
-        fwrite(&registro, sizeof(Registro), 1, arquivo);
+
+    // Definir a semente do gerador de números aleatórios
+    srand(time(NULL));
+
+    if (ordem == 1) {
+        // Ordenação ascendente
+        for (int i = 0; i < quantidade; i++) {
+            registro.chave = i;
+            registro.dado1 = i * 100;
+            sprintf(registro.dado2, "Dado 2 do registro %d", i);
+            sprintf(registro.dado3, "Dado 3 do registro %d", i);
+            fwrite(&registro, sizeof(Registro), 1, arquivo);
+        }
+    } else if (ordem == 2) {
+        // Ordenação descendente
+        for (int i = quantidade - 1; i >= 0; i--) {
+            registro.chave = i;
+            registro.dado1 = i * 100;
+            sprintf(registro.dado2, "Dado 2 do registro %d", i);
+            sprintf(registro.dado3, "Dado 3 do registro %d", i);
+            fwrite(&registro, sizeof(Registro), 1, arquivo);
+        }
+    } else if (ordem == 3) {
+        // Embaralhamento aleatório
+        int* chaves = malloc(quantidade * sizeof(int));
+        for (int i = 0; i < quantidade; i++) {
+            chaves[i] = i;
+        }
+        for (int i = quantidade - 1; i > 0; i--) {
+            int j = rand() % (i + 1);
+            int temp = chaves[i];
+            chaves[i] = chaves[j];
+            chaves[j] = temp;
+        }
+        for (int i = 0; i < quantidade; i++) {
+            registro.chave = chaves[i];
+            registro.dado1 = chaves[i] * 100;
+            sprintf(registro.dado2, "Dado 2 do registro %d", chaves[i]);
+            sprintf(registro.dado3, "Dado 3 do registro %d", chaves[i]);
+            fwrite(&registro, sizeof(Registro), 1, arquivo);
+        }
+        free(chaves);
+    } else {
+        printf("Opção inválida para ordem de criação do arquivo!\n");
+        exit(1);
     }
+
     fclose(arquivo);
 }
 

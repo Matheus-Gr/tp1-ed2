@@ -15,7 +15,7 @@ typedef struct {
     char dado3[MAX_DADO3_SIZE];
 } Registro;
 
-void criarArquivoBinario(int quantidade, char* caminho);
+void criarArquivoBinario(int quantidade, char* caminho, int ordem);
 void lerArquivoBinario(char* caminho);
 
 #endif //TP1_REGISTRO_H

@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Registro.h"
+#include "Estatistica.h"
+#include "ASI.h"
 
-#define ARQUIVO "../registros.bin"
+#define ARQUIVO "../Dados/dados_100_1.bin"
 
 int main(int argc, char *argv[]) {
     int metodo, quantidade, situacao, chave, mostrar_pesquisa = 0;
@@ -18,10 +20,22 @@ int main(int argc, char *argv[]) {
     if (argc == 6 && strcmp(argv[5], "-P") == 0) {
         mostrar_pesquisa = 1;
     }
+    Estatistica* est;
+
+    criarArquivoBinario(100,"../Dados/dados",1);
+    if(mostrar_pesquisa){
+        lerArquivoBinario(ARQUIVO);
+    }
     switch (metodo) {
         case 1:
-            criarArquivoBinario(1000,ARQUIVO);
-            lerArquivoBinario(ARQUIVO);
+            iniciarEstatistica(est);
+            Registro* reg = malloc(sizeof(Registro));
+            reg->chave = chave;
+            if (!pesquisaSequencialIndexado(ARQUIVO,quantidade,reg,est))
+                printf("Registro %d\n dado 1:%d\n, dado 2:%s\n, dado 3:%s\n",reg->chave,reg->dado1, reg->dado2, reg->dado3);
+            else
+                printf("Item nao encontrado");
+            finalizarEstatistica(est);
             break;
         default:
             printf("Método inválido. Use um número de 1 a 4.\n");
