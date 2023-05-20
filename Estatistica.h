@@ -14,8 +14,10 @@ typedef struct {
     clock_t tempoFim;
 } Estatistica;
 
-void iniciarEstatistica(Estatistica* estatistica);
+void zerarEstatistica(Estatistica* estatistica);
 void finalizarEstatistica(Estatistica* estatistica);
+void incTransf(Estatistica* estatistica);
+void incComp(Estatistica* estatistica);
 double calcularTempo(Estatistica* estatistica);
 
 #endif //TP1_ESTATISTICA_H

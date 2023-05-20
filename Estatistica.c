@@ -4,7 +4,7 @@
 
 #include "Estatistica.h"
 
-void iniciarEstatistica(Estatistica* estatistica) {
+void zerarEstatistica(Estatistica* estatistica) {
     estatistica->transferencias = 0;
     estatistica->comparacoes = 0;
     estatistica->tempoInicio = clock();
@@ -12,6 +12,13 @@ void iniciarEstatistica(Estatistica* estatistica) {
 
 void finalizarEstatistica(Estatistica* estatistica) {
     estatistica->tempoFim = clock();
+}
+
+void incTransf(Estatistica* estatistica) {
+  estatistica->transferencias++;
+}
+void incComp(Estatistica* estatistica){
+    estatistica->comparacoes++;
 }
 
 double calcularTempo(Estatistica* estatistica) {

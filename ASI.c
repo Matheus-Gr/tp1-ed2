@@ -16,17 +16,19 @@ int pesquisaSequencialIndexado(char* caminhoArquivo, int quantidade, Registro* c
         printf("Erro ao abrir arquivo binário!\n");
         exit(1);
     }
+
     //definir numero de paginas
     int n_paginas = quantidade / ITENSPAGINA;
 
     //criar tabela de index
     int tabela_indexes[n_paginas];
+    Registro registro;
     for (int i = 0; i < n_paginas; ++i) {
         fseek(arquivo, i * ITENSPAGINA * sizeof(Registro), SEEK_SET);
 
-        // Ler o registro no início da página
-        Registro registro;
+        // Ler o registro do início da página
         fread(&registro, sizeof(Registro), 1, arquivo);
+        incTransf(estatistica);
 
         tabela_indexes[i] = registro.chave;
     }
@@ -40,22 +42,23 @@ int pesquisaSequencialIndexado(char* caminhoArquivo, int quantidade, Registro* c
     Registro pagina[ITENSPAGINA];
     int paginaEncontrada = -1;
     for (int i = 0; i < n_paginas; ++i) {
+        incComp(estatistica);
         if (tabela_indexes[i] <= chave->chave && (i == n_paginas - 1 || tabela_indexes[i + 1] > chave->chave)) {
+            incComp(estatistica);
             fseek(arquivo, i * ITENSPAGINA * sizeof(Registro), SEEK_SET);
             fread(pagina, sizeof(Registro), ITENSPAGINA, arquivo);
+            incTransf(estatistica);
             paginaEncontrada = i;
             break;
         }
     }
-    printf("dado1: %d\n",pagina[0].dado1);
-    printf("dado1: %d\n",pagina[1].dado1);
-    printf("dado1: %d\n",pagina[2].dado1);
-    printf("dado1: %d\n",pagina[3].dado1);
 
     if (paginaEncontrada != -1) {
         // Realizar a busca dentro da página encontrada
         for (int i = 0; i < ITENSPAGINA; ++i) {
+            incComp(estatistica);
             if (pagina[i].chave == chave->chave) {
+                incComp(estatistica);
                 // Chave encontrada
                 chave->dado1 = pagina[i].dado1;
                 strcpy(chave->dado2, pagina[i].dado2);

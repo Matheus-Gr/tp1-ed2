@@ -20,22 +20,32 @@ int main(int argc, char *argv[]) {
     if (argc == 6 && strcmp(argv[5], "-P") == 0) {
         mostrar_pesquisa = 1;
     }
-    Estatistica* est;
 
+    //Definição da chave que ser buscada
+    Registro* reg = malloc(sizeof(Registro));
+    reg->chave = chave;
+
+    //criação de estatistica
+    Estatistica* est = malloc(sizeof(est));
+
+    //tempoarariamente para garantir que não tera arquivos corrompidos
     criarArquivoBinario(100,"../Dados/dados",1);
     if(mostrar_pesquisa){
         lerArquivoBinario(ARQUIVO);
     }
+
     switch (metodo) {
         case 1:
-            iniciarEstatistica(est);
-            Registro* reg = malloc(sizeof(Registro));
-            reg->chave = chave;
-            if (!pesquisaSequencialIndexado(ARQUIVO,quantidade,reg,est))
-                printf("Registro %d\n dado 1:%d\n, dado 2:%s\n, dado 3:%s\n",reg->chave,reg->dado1, reg->dado2, reg->dado3);
+            zerarEstatistica(est);
+            if (!pesquisaSequencialIndexado(ARQUIVO,quantidade,reg,est)) {
+                finalizarEstatistica(est);
+                printf("Registro %d\n Dado 1:%d\n Dado 2:%s\n Dado 3:%s\n", reg->chave, reg->dado1, reg->dado2,
+                       reg->dado3);
+                printf("Estatisticas\n Numero de transferencias: %d\n Numero de comparacoes: %d\n Tempo %.4f\n",
+                       est->transferencias, est->comparacoes, calcularTempo(est));
+            }
             else
                 printf("Item nao encontrado");
-            finalizarEstatistica(est);
             break;
         default:
             printf("Método inválido. Use um número de 1 a 4.\n");
