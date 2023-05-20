@@ -5,7 +5,7 @@
 #include "Estatistica.h"
 #include "ASI.h"
 
-#define ARQUIVO "../Dados/dados_100_1.bin"
+#define ARQUIVO "dados_100_1.bin"
 
 int main(int argc, char *argv[]) {
     int metodo, quantidade, situacao, chave, mostrar_pesquisa = 0;
@@ -26,10 +26,10 @@ int main(int argc, char *argv[]) {
     reg->chave = chave;
 
     //criação de estatistica
-    Estatistica* est = malloc(sizeof(est));
+    Estatistica* est = malloc(sizeof(Estatistica));
 
     //tempoarariamente para garantir que não tera arquivos corrompidos
-    criarArquivoBinario(100,"../Dados/dados",1);
+    criarArquivoBinario(100,"dados",1);
     if(mostrar_pesquisa){
         lerArquivoBinario(ARQUIVO);
     }
