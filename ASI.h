@@ -7,8 +7,9 @@
 
 #include "Estatistica.h"
 #include "Registro.h"
+#include <stdio.h>
 
-int pesquisaSequencialIndexado(char* caminhoArquivo, int quantidade, Registro* chave, Estatistica* estatistica);
+int pesquisaSequencialIndexado(FILE* arquivo, int quantidade, Registro* chave, Estatistica* estatistica);
 
 #endif //TP1_ASI_H
 

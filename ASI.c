@@ -4,19 +4,11 @@
 
 #include "ASI.h"
 #include "Estatistica.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define ITENSPAGINA 4
 
-int pesquisaSequencialIndexado(char* caminhoArquivo, int quantidade, Registro* chave, Estatistica* estatistica) {
-    FILE* arquivo = fopen(caminhoArquivo, "rb");
-    if (arquivo == NULL) {
-        printf("Erro ao abrir arquivo binário!\n");
-        exit(1);
-    }
-
+int pesquisaSequencialIndexado(FILE * arquivo, int quantidade, Registro* chave, Estatistica* estatistica) {
     //definir numero de paginas
     int n_paginas = quantidade / ITENSPAGINA;
 
@@ -67,8 +59,6 @@ int pesquisaSequencialIndexado(char* caminhoArquivo, int quantidade, Registro* c
             }
         }
     } else {
-        // Página não encontrada
-        printf("Pagina nao encontrada!\n");
         return 1;
     }
 //    printf("Registro %d\n Dado 1:%d\n Dado 2:%s\n Dado 3:%s\n",chave->chave,chave->dado1, chave->dado2, chave->dado3);
