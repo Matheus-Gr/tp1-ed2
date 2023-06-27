@@ -5,8 +5,10 @@
 #include "Estatistica.h"
 #include "ArvoreBinaria.h"
 #include "ASI.h"
+#include "arvoreB.h"
+#include "arvoreEstrela.h"
 
-#define ARQUIVO "dados_100_3.bin"
+#define ARQUIVO "../Dados/dados_100_3.bin"
 
 int main(int argc, char *argv[]) {
     int metodo, quantidade, ordem, chave, mostrar_pesquisa = 0;
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]) {
     Estatistica* est = malloc(sizeof(Estatistica));
 
     //Tempoarariamente para garantir que não tera arquivos corrompidos
-    criarArquivoBinario(100, "dados", ordem);
+    criarArquivoBinario(100, "../Dados/dados", ordem);
     if(mostrar_pesquisa){
         lerArquivoBinario(ARQUIVO);
     }
@@ -48,7 +50,12 @@ int main(int argc, char *argv[]) {
             zerarEstatistica(est);
             pesquisaSequencialIndexado(arquivo,quantidade,reg,est);
             finalizarEstatistica(est);
-
+            printf("Registro %d\n"
+                   "    Dado 1:%ld\n"
+                   "    Dado 2:%s\n"
+                   "    Dado 3:%s\n",
+                   reg->chave, reg->dado1,
+                   reg->dado2, reg->dado3);
             break;
         case 2:
             criarArvoreBinaria(arquivo,quantidade);
@@ -57,24 +64,33 @@ int main(int argc, char *argv[]) {
             zerarEstatistica(est);
             *reg = buscaArvoreBinaria(arvore_binaria, chave,est);
             finalizarEstatistica(est);
-
+            printf("Registro %d\n"
+                   "    Dado 1:%ld\n"
+                   "    Dado 2:%s\n"
+                   "    Dado 3:%s\n",
+                   reg->chave, reg->dado1,
+                   reg->dado2, reg->dado3);
             break;
+        case 3:
+            zerarEstatistica(est);
+            arvoreB(arquivo, chave, est);
+            finalizarEstatistica(est);
+            break;
+        case 4:
+            zerarEstatistica(est);
+            arvoreEstrela(arquivo, chave, est);
+            finalizarEstatistica(est);
+            break;
+
         default:
-            printf("Método inválido. Use um número de 1 a 4.\n");
+            printf("Metodo invalido. Use um numero de 1 a 4.\n");
             return 1;
     }
 
-    //Mostrar chave encontrada
-    printf("Registro %d\n"
-           " Dado 1:%ld\n"
-           " Dado 2:%s\n"
-           " Dado 3:%s\n",
-           reg->chave, reg->dado1,
-           reg->dado2, reg->dado3);
     printf("Estatisticas\n"
-           " Numero de transferencias: %d\n"
-           " Numero de comparacoes: %d\n"
-           " Tempo: %fs\n",
+           "    Numero de transferencias: %d\n"
+           "    Numero de comparacoes: %d\n"
+           "    Tempo: %fs\n",
            est->transferencias, est->comparacoes,
            calcularTempo(est));
 
