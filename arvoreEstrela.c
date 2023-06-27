@@ -1,10 +1,24 @@
 #include "ArvoreEstrela.h"
+#include "stdio.h"
+#include "stdlib.h"
 
+/**
+ * Inicializa a árvore binária.
+ *
+ * @param Arvore Ponteiro para a árvore binária.
+ */
 void Inicializa (TipoApontadorEstrela *Arvore)
 {
     *Arvore = NULL;
 }
 
+/**
+ * Realiza a pesquisa de um registro na árvore estrela.
+ *
+ * @param x Ponteiro para o registro a ser pesquisado.
+ * @param Ap Ponteiro para a raiz da árvore estrela.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ */
 void pesquisaArvoreEstrela(Registro *x, TipoApontadorEstrela *Ap, Estatistica *est) {
     int i;
     TipoApontadorEstrela Pag;
@@ -40,6 +54,14 @@ void pesquisaArvoreEstrela(Registro *x, TipoApontadorEstrela *Ap, Estatistica *e
 		printf("Chave nao esta presente na arvore\n");
 }
 
+/**
+ * Insere um registro na página da árvore estrela.
+ *
+ * @param Ap Ponteiro para a página da árvore estrela.
+ * @param Reg Registro a ser inserido.
+ * @param ApDir Ponteiro para a página da árvore estrela à direita.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ */
 void insereNaPaginaArvoreEstrela(TipoApontadorEstrela Ap, Registro Reg, TipoApontadorEstrela ApDir, Estatistica *est)
 {//insere registro na pagina (folha ou indice)
     int k;
@@ -89,6 +111,16 @@ void insereNaPaginaArvoreEstrela(TipoApontadorEstrela Ap, Registro Reg, TipoApon
     Ap->UU.U1.ne++;
 }
 
+/**
+ * Insere um registro na árvore estrela.
+ *
+ * @param Reg Registro a ser inserido.
+ * @param Ap Ponteiro para a página da árvore estrela.
+ * @param Cresceu Ponteiro para a variável que indica se a árvore cresceu.
+ * @param RegRetorno Ponteiro para o registro de retorno.
+ * @param ApRetorno Ponteiro para a página de retorno.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ */
 void insArvoreEstrela(Registro Reg, TipoApontadorEstrela Ap, int *Cresceu, Registro *RegRetorno, TipoApontadorEstrela *ApRetorno, Estatistica *est)
 {
     TipoApontadorEstrela ApTemp,Pag;
@@ -116,7 +148,7 @@ void insArvoreEstrela(Registro Reg, TipoApontadorEstrela Ap, int *Cresceu, Regis
 		}
         insArvoreEstrela(Reg, Pag->UU.U0.pi[i], Cresceu, RegRetorno, ApRetorno, est);
 		return;
-	
+
 	
 		if (!*Cresceu) {
 			return;
@@ -199,8 +231,15 @@ void insArvoreEstrela(Registro Reg, TipoApontadorEstrela Ap, int *Cresceu, Regis
     *RegRetorno = Ap->UU.U1.re[M];
     insereNaPaginaArvoreEstrela(ApTemp, Ap->UU.U1.re[M], NULL, est);
     *ApRetorno = ApTemp;
-} 
-//insereArvoreEstrela registro na arvore (onde sera inserido sera verificado no insArvoreEstrela)
+}
+
+/**
+ * Insere um registro na árvore estrela.
+ *
+ * @param Reg Registro a ser inserido.
+ * @param Ap Ponteiro para o ponteiro da raiz da árvore estrela.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ */
 void insereArvoreEstrela(Registro Reg, TipoApontadorEstrela *Ap, Estatistica *est)
 {
     int Cresceu;
@@ -216,8 +255,7 @@ void insereArvoreEstrela(Registro Reg, TipoApontadorEstrela *Ap, Estatistica *es
 			ApTemp->Pt = Externa;
 			ApTemp->UU.U1.ne = 1;
 			ApTemp->UU.U1.re[0] = RegRetorno;
-		}
-		else{	
+		}else{
 			ApTemp->Pt = Interna;
 			ApTemp->UU.U0.ni = 1;
 			ApTemp->UU.U0.ri[0] = RegRetorno;
@@ -227,7 +265,14 @@ void insereArvoreEstrela(Registro Reg, TipoApontadorEstrela *Ap, Estatistica *es
 		*Ap = ApTemp;
 	}
 }
-//Inicializa arvore b estrela
+
+/**
+ * Inicializa a árvore B estrela.
+ *
+ * @param arq Ponteiro para o arquivo contendo os registros a serem inseridos na árvore.
+ * @param chave Chave a ser pesquisada na árvore após a inicialização.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ */
 void arvoreEstrela(FILE *arq, int chave, Estatistica* est)
 {
     TipoApontadorEstrela Ap;

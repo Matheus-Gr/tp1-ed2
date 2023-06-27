@@ -6,13 +6,18 @@
 #include "Registro.h"
 
 
+/**
+ * Cria uma árvore binária a partir de um arquivo de registros.
+ *
+ * @param arquivo Ponteiro para o arquivo de registros.
+ * @param quantidade Quantidade de registros no arquivo.
+ */
 void criarArvoreBinaria(FILE *arquivo, int quantidade) {
     Registro registro;
     NodeBinario* nodes = (NodeBinario*) malloc(quantidade * sizeof(NodeBinario));
 
     int pos = 0;
-    while (fread(&registro, sizeof(Registro),1,arquivo)){
-//        printf("chave: %d\n",registro.chave);
+    while (fread(&registro, sizeof(Registro),1,arquivo)) {
         NodeBinario node;
         node.esquerda = -1;
         node.direita = -1;
@@ -22,41 +27,34 @@ void criarArvoreBinaria(FILE *arquivo, int quantidade) {
         nodes[pos] = node;
 
         int pos_atual = 0;
-        while (pos_atual != -1 && pos != 0){
-//            printf("pos %d: %d < %d\n",pos, registro.chave,nodes[pos_atual].registro.chave);
-            if(registro.chave < nodes[pos_atual].registro.chave){
-//                printf("sim!\n");
-                if(nodes[pos_atual].esquerda == -1){
-//                    printf("escrito!\n");
+        while (pos_atual != -1 && pos != 0) {
+            if (registro.chave < nodes[pos_atual].registro.chave) {
+                if (nodes[pos_atual].esquerda == -1) {
                     nodes[pos_atual].esquerda = pos;
                     pos_atual = -1;
-                }else{
-//                    printf("pulando para pos %d!\n",pos_atual);
+                } else {
                     pos_atual = nodes[pos_atual].esquerda;
                 }
-            }else{
-//                printf("nao!\n");
-                if(nodes[pos_atual].direita == -1){
-//                    printf("escrito!\n");
+            } else {
+                if (nodes[pos_atual].direita == -1) {
                     nodes[pos_atual].direita = pos;
                     pos_atual = -1;
-                }else{
-//                    printf("pulando para pos %d!\n",pos_atual);
+                } else {
                     pos_atual = nodes[pos_atual].direita;
                 }
             }
         }
-        pos ++;
+        pos++;
     }
 
     FILE* arvore_binaria = fopen("../arvorebin.bin", "wb");
     if (arvore_binaria == NULL) {
-        printf("Erro ao criar arvore!\n");
+        printf("Erro ao criar árvore binária!\n");
         free(nodes);
         exit(1);
     }
 
-    for(int i = 0; i < quantidade; i++){
+    for(int i = 0; i < quantidade; i++) {
         fwrite(&nodes[i], sizeof(NodeBinario), 1, arvore_binaria);
     }
 
@@ -64,6 +62,14 @@ void criarArvoreBinaria(FILE *arquivo, int quantidade) {
     free(nodes);
 }
 
+/**
+ * Realiza a busca de um registro na árvore binária.
+ *
+ * @param arvore_binaria Ponteiro para o arquivo que contém a árvore binária.
+ * @param chave Chave do registro a ser buscado.
+ * @param est Ponteiro para a estrutura de estatísticas.
+ * @return O registro encontrado na árvore binária.
+ */
 Registro buscaArvoreBinaria(FILE *arvore_binaria, int chave, Estatistica* est) {
     NodeBinario node;
     fread(&node, sizeof(NodeBinario), 1, arvore_binaria);

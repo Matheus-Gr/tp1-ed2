@@ -8,11 +8,20 @@
 
 #define ITENSPAGINA 4
 
+/**
+ * Realiza uma pesquisa sequencial indexada em um arquivo de registros.
+ *
+ * @param arquivo Ponteiro para o arquivo contendo os registros.
+ * @param quantidade Quantidade total de registros no arquivo.
+ * @param chave Ponteiro para a chave a ser pesquisada.
+ * @param estatistica Ponteiro para a estrutura de estatísticas.
+ * @return Retorna 0 se a chave for encontrada e 1 caso contrário.
+ */
 int pesquisaSequencialIndexado(FILE * arquivo, int quantidade, Registro* chave, Estatistica* estatistica) {
-    //definir numero de paginas
+    // Definir o número de páginas
     int n_paginas = quantidade / ITENSPAGINA;
 
-    //criar tabela de index
+    // Criar tabela de índices
     int tabela_indexes[n_paginas];
     Registro registro;
     for (int i = 0; i < n_paginas; ++i) {
@@ -24,11 +33,6 @@ int pesquisaSequencialIndexado(FILE * arquivo, int quantidade, Registro* chave, 
 
         tabela_indexes[i] = registro.chave;
     }
-
-//    visualizar a tabela de indexes
-//    for (int i = 0; i < n_paginas; ++i) {
-//        printf("Pagina[%d]: %d\n", i +1, tabela_indexes[i]);
-//    }
 
     // Fazer busca
     Registro pagina[ITENSPAGINA];
@@ -61,7 +65,6 @@ int pesquisaSequencialIndexado(FILE * arquivo, int quantidade, Registro* chave, 
     } else {
         return 1;
     }
-//    printf("Registro %d\n Dado 1:%d\n Dado 2:%s\n Dado 3:%s\n",chave->chave,chave->dado1, chave->dado2, chave->dado3);
 
     fclose(arquivo);
     return 0;
