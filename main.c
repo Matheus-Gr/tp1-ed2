@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
 
     char nomeArquivo[256];
-    snprintf(nomeArquivo, sizeof(nomeArquivo), "../Dados/dados_%d_%d.bin", quantidade, ordem);
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "dados_%d_%d.bin", quantidade, ordem);
 
     //Definição da chave que ser buscada
     Registro* reg = malloc(sizeof(Registro));
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     Estatistica* est = malloc(sizeof(Estatistica));
 
     //Tempoarariamente para garantir que não tera arquivos corrompidos
-    criarArquivoBinario(quantidade, "../Dados/dados", ordem);
+    criarArquivoBinario(quantidade, "dados", ordem);
     if(mostrar_pesquisa){
         lerArquivoBinario(nomeArquivo);
     }
