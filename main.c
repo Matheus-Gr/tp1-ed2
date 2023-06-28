@@ -8,8 +8,6 @@
 #include "arvoreB.h"
 #include "arvoreEstrela.h"
 
-#define ARQUIVO "../Dados/dados_100_3.bin"
-
 int main(int argc, char *argv[]) {
     int metodo, quantidade, ordem, chave, mostrar_pesquisa = 0;
     if (argc < 5 || argc > 6) {
@@ -24,6 +22,10 @@ int main(int argc, char *argv[]) {
         mostrar_pesquisa = 1;
     }
 
+
+    char nomeArquivo[256];
+    snprintf(nomeArquivo, sizeof(nomeArquivo), "../Dados/dados_%d_%d.bin", quantidade, ordem);
+
     //Definição da chave que ser buscada
     Registro* reg = malloc(sizeof(Registro));
     reg->chave = chave;
@@ -32,13 +34,13 @@ int main(int argc, char *argv[]) {
     Estatistica* est = malloc(sizeof(Estatistica));
 
     //Tempoarariamente para garantir que não tera arquivos corrompidos
-    criarArquivoBinario(100, "../Dados/dados", ordem);
+    criarArquivoBinario(quantidade, "../Dados/dados", ordem);
     if(mostrar_pesquisa){
-        lerArquivoBinario(ARQUIVO);
+        lerArquivoBinario(nomeArquivo);
     }
 
     //abrindo arquivo a ser manipulado
-    FILE* arquivo = fopen(ARQUIVO, "rb");
+    FILE* arquivo = fopen(nomeArquivo, "rb");
     if (arquivo == NULL) {
         printf("Erro ao abrir arquivo binário!\n");
         exit(1);
